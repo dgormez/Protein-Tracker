@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ServiceModel;
 using System.Web.Script.Services;
 using System.Web.Services;
 using System.Web.Services.Protocols;
@@ -8,9 +9,24 @@ namespace ProteinTrackerWebServices
 {
     [WebService(Namespace = "http://simpleprogrammer.com")]
     [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-    [System.ComponentModel.ToolboxItem(false)]
     [ScriptService]
-    public class ProteinTrackingService : WebService
+    [ServiceContract(Namespace = "http://simpleprogrammer.com")]
+    public interface IProteinTrackerService
+    {
+        [WebMethod]
+        [OperationContract]
+        int AddProtein(int amount, int userId);
+
+        [WebMethod]
+        [OperationContract]
+        int AddUser(string name, int goal);
+
+        [WebMethod]
+        [OperationContract]
+        List<User> ListUsers();
+    }
+    
+    public class ProteinTrackingService : WebService , IProteinTrackerService
     {
         private UserRepository repository = new UserRepository();
 
